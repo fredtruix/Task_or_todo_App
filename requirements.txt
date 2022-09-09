@@ -1,0 +1,13 @@
+asgiref @ file:///tmp/build/80754af9/asgiref_1625643473416/work
+autopep8 @ file:///opt/conda/conda-bld/autopep8_1650463822033/work
+certifi==2022.5.18.1
+Django @ file:///tmp/build/80754af9/django_1625585912945/work
+djangorestframework==3.13.1
+Pillow==9.1.0
+psycopg2 @ file:///opt/concourse/worker/volumes/live/7541fe58-2a45-4073-5d69-313e733fc729/volume/psycopg2_1612298592535/work
+pycodestyle @ file:///tmp/build/80754af9/pycodestyle_1636635402688/work
+pytz==2021.3
+sqlparse @ file:///tmp/build/80754af9/sqlparse_1602184451250/work
+toml @ file:///tmp/build/80754af9/toml_1616166611790/work
+typing_extensions @ file:///opt/conda/conda-bld/typing_extensions_1647553014482/work
+xxx==0.0.1
