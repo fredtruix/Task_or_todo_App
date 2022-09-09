@@ -2,7 +2,7 @@ from django.urls import path
 from .apis import (ApiOverview, taskCreate, taskDelete, taskDetail, taskUpdate, tasklist)
 
 urlpatterns = [
-    path('', ApiOverview),
+    path('apiover-view/', ApiOverview),
     path('task-list/', tasklist),
     path('task-detail/<str:pk>/', taskDetail),
     path('task-create/', taskCreate),
