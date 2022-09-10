@@ -130,11 +130,13 @@
 		}
 		var csrftoken = getCookie('csrftoken');
         var activeItem = null;
+        activeItemid = null;
+        var list_snapshot = []
 
         buildList()
         function buildList(){
             var wrapper = document.getElementById('list-wrapper')
-            wrapper.innerHTML = ""
+            // wrapper.innerHTML = ""
             var url = 'http://127.0.0.1:8000/api/task-list/'
             fetch(url)
             .then((response) =>response.json())
@@ -142,6 +144,12 @@
                 console.log("data:",data)
                 var list = data
                 for(var i in list){
+
+                    try{
+						document.getElementById(`data-row-${i}`).remove()
+					}catch(err){
+
+					}
                     var title = `<span class="title">${list[i].title}</span>`
                     if (list[i].completed == true){
 						title = `<strike class="title">${list[i].title}</strike>`
@@ -150,7 +158,7 @@
                     
                     <div id="data-row-${i}" class="task-wrapper flex-wrapper">
 
-                        <div style="flex:7">
+                        <div style="flex:7" onclick="strikeUnstrike(${list[i].id},'${list[i].title}', ${list[i].completed})">
 							${title}
 						</div>
 
@@ -159,13 +167,21 @@
 						</div>
 
                         <div style="flex:1">
-							<button class="btn btn-sm btn-outline-dark delete">-</button>
+							<button class="btn btn-sm btn-outline-dark delete" onclick="deleteItem(${list[i].id})">X</button>
 						</div>
                     </div>
                     `
 
                     wrapper.insertAdjacentHTML('beforeend', item)
                 }
+
+                if (list_snapshot.length > list.length){
+					for (var i = list.length; i < list_snapshot.length; i++){
+						document.getElementById(`data-row-${i}`).remove()
+					}
+				}
+
+				list_snapshot = list
             })
         }
 
@@ -175,9 +191,14 @@
             e.preventDefault()
             console.log('form submitted')
             var url = 'http://127.0.0.1:8000/api/task-create/'
+            method = 'POST'
+            if(activeItem != null ){
+                var url = `http://127.0.0.1:8000/api/task-update/${activeItemid}/`
+                method = 'PUT'
+            }
             var title = document.getElementById('title').value
             fetch(url, {
-                method:'POST',
+                method:method,
                 headers:{
                     'Content-type':'application/json',
                     'X-CSRFToken':csrftoken,
@@ -195,7 +216,40 @@
         function editItem(id, title, completed){
              console.log(id)
              activeItem = title
+             activeItemid = id
              document.getElementById('title').value = activeItem
+        }
+
+        function deleteItem(id){
+            console.log(id)
+            fetch(`http://127.0.0.1:8000/api/task-delete/${id}/`,
+            {
+                method:'DELETE',
+                headers:{
+                    'Content-type':'application/json',
+                    'X-CSRFToken':csrftoken,
+                }
+            }).then((response)=>
+            {
+                buildList()
+            })
+        }
+
+
+        function strikeUnstrike(id,title, completed){
+            console.log('Strike clicked')
+            completed = !completed;
+            fetch(`http://127.0.0.1:8000/api/task-update/${id}/`,{
+
+                method:'PUT',
+                headers:{
+					'Content-type':'application/json',
+					'X-CSRFToken':csrftoken,
+				},
+                body:JSON.stringify({'title':title, 'completed':completed})
+            }).then((response) => {
+				buildList()
+			})
         }
     </script>
 
