@@ -129,6 +129,7 @@
 		    return cookieValue;
 		}
 		var csrftoken = getCookie('csrftoken');
+        var activeItem = null;
 
         buildList()
         function buildList(){
@@ -154,7 +155,7 @@
 						</div>
 
                         <div style="flex:1">
-							<button class="btn btn-sm btn-outline-info edit">Edit </button>
+							<button class="btn btn-sm btn-outline-info edit" onclick="editItem(${list[i].id},'${list[i].title}',${list[i].completed} )">Edit </button>
 						</div>
 
                         <div style="flex:1">
@@ -185,9 +186,17 @@
             }
             ).then(function(response){
                 buildList()
+                document.getElementById('form').reset()
             })
 
         })
+
+
+        function editItem(id, title, completed){
+             console.log(id)
+             activeItem = title
+             document.getElementById('title').value = activeItem
+        }
     </script>
 
     <!-- JavaScript Bundle with Popper -->
